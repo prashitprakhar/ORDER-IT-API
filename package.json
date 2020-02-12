@@ -1,0 +1,24 @@
+{
+  "name": "order-it-api",
+  "version": "1.0.0",
+  "description": "Order IT Services API",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "author": "Prashit P",
+  "license": "ISC",
+  "dependencies": {
+    "@sendgrid/mail": "^6.5.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "gridfs-stream": "^1.1.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
+    "mongoose": "^5.8.9",
+    "nodemailer": "^6.4.2",
+    "nodemon": "^2.0.2",
+    "validator": "^12.1.0"
+  }
+}
