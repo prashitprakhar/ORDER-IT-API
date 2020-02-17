@@ -21,6 +21,12 @@ router.post('/changeItemAvailability', authentication, SHOP_CONTROLLER.CHANGE_IT
 
 router.post('/changeShopOpenStatus', authentication, SHOP_CONTROLLER.CHANGE_SHOP_AVAILABILITY);
 
+router.get('/getAllShops', SHOP_CONTROLLER.GET_ALL_SHOPS);
+
+router.post('/getShopOfferedItemsForCustomers', SHOP_CONTROLLER.GET_SHOP_OFFERED_ITEMS_FOR_CUSTOMERS);
+
+router.post('/getShopProfileUnauthenticated', SHOP_CONTROLLER.GET_SHOP_PROFILE_FOR_CUSTOMERS);
+
 // router.post('/signup', USER_CONTROLLER.USER_SIGNUP_CONTROLLER);
 
 // router.post('/logout', authentication, USER_CONTROLLER.LOGOUT_USER_CONTROLLER);

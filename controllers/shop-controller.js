@@ -227,4 +227,36 @@ exports.ADD_ITEMS_FOR_SHOP = async (req, res) => {
     }
 }
 
+exports.GET_ALL_SHOPS = async (req, res) => {
+    try {
+        const allShops = await ShopProfileModel.find({});
+        res.status(200).send(allShops)
+    }
+    catch (e) {
+        res.status(400).send(e.toString());
+    }
+}
 
+exports.GET_SHOP_OFFERED_ITEMS_FOR_CUSTOMERS = async (req, res) => {
+    const shopId = req.body.shopId;
+
+    try {
+        const shopItemsDoc = await ShopOfferedItemsModel.findOne({ shopId: shopId });
+        res.status(201).json(shopItemsDoc)
+    }
+    catch (e) {
+        res.status(401).send(e.toString());
+    }
+}
+
+exports.GET_SHOP_PROFILE_FOR_CUSTOMERS = async (req, res) => {
+    const shopId = req.body.shopId;
+
+    try {
+        const shopProfile = await ShopProfileModel.findOne({ shopId: shopId });
+        res.status(201).json(shopProfile)
+    }
+    catch (e) {
+        res.status(401).send(e.toString());
+    }
+}
