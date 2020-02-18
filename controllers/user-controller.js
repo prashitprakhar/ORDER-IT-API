@@ -88,12 +88,12 @@ exports.USER_RESET_PASSWORD = async (req, res) => {
     const hashedPassword = await bcrypt.hash(newPassword, 8)
     try {
         const checkUserCreds = await UserModel.findByEmailAndPin(email, securePin);
-        console.log("USER found *****",checkUserCreds);
+        // console.log("USER found *****",checkUserCreds);
         const user = await UserModel.findOneAndUpdate({email}, {password: hashedPassword})
         res.status(201).send({user})
     }
     catch (e) {
-        console.log("Error",e.toString())
+        // console.log("Error",e.toString())
         // const error = {
         //     Error: e.toString()
         // }
@@ -125,6 +125,10 @@ exports.LOGOUT_USER_ALL_LOGINS = async (req, res) => {
     catch(e) {
         res.status(500).send(e)
     }
+}
+
+exports.SEND_ORDER_STATUS_PUSH_NOTIFICATION = async (req, res) => {
+
 }
 
 // exports.CHECK_USER_LOGIN_CREDS = async (req, res) => {

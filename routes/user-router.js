@@ -17,6 +17,8 @@ router.post('/deleteAccount', authentication, USER_CONTROLLER.DELETE_ACCOUNT);
 
 router.post('/resetPassword', USER_CONTROLLER.USER_RESET_PASSWORD);
 
+router.post('/sendOrderStatusPushNotification', USER_CONTROLLER.SEND_ORDER_STATUS_PUSH_NOTIFICATION);
+
 // router.post('/checkLoginStatus', authentication, USER_CONTROLLER.CHECK_USER_LOGIN_CREDS);
 
 module.exports = router;

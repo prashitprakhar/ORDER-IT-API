@@ -260,3 +260,6 @@ exports.GET_SHOP_PROFILE_FOR_CUSTOMERS = async (req, res) => {
         res.status(401).send(e.toString());
     }
 }
+
+
+// Server Key FCM - AAAAg06JBfk:APA91bEl6ArHNOxGMucTEovZAfr5wK6AnbfOg60PFBFyJKLzacVgmQAXVPPO5V1wDsNkN8376xznRl4Ymtqe7ocbC0RZaU7nCO2RajO1-HaFG1_S9mKRORmE61AQsG-gl8dcEpYr6yBO

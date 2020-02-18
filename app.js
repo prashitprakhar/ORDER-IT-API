@@ -8,8 +8,8 @@ const EMAIL_ROUTER_FACTORY = require('./routes/email-router');
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(bodyParser.json({limit: '10mb', extended: true}));
-app.use(bodyParser.urlencoded({limit: '10mb',extended : false}));
+app.use(bodyParser.json({ limit: '10mb', extended: true }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: false }));
 
 app.use((req, res, next) => {
     res.append('Access-Control-Allow-Origin', ['*']);
@@ -24,6 +24,9 @@ app.use('/shop', SHOP_ROUTER_FACTORY);
 app.use('/email', EMAIL_ROUTER_FACTORY);
 
 app.listen(port, () => {
-    console.log("Listening on port : ",port);
+    console.log("Listening on port : ", port);
 })
 
+// orderitservices-firebase-adminsdk-o1nqc-6e63e2dd94
+
+//https://orderitapi.herokuapp.com/
