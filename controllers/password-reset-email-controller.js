@@ -29,7 +29,7 @@ exports.usePasswordHashToMakeToken = ({
   //// Sends an email IRL! ////
 exports.sendPasswordResetEmail = async (req, res) => {
     const { email } = req.params
-    console.log("Email for password change", email);
+    // console.log("Email for password change", email);
     let user;
     try {
     //   user = await UserModel.findOne({ email }).exec()
@@ -37,12 +37,12 @@ exports.sendPasswordResetEmail = async (req, res) => {
     } catch (err) {
       res.status(404).json("No user with that email")
     }
-    console.log("User fetched from DB ******",user);
+    // console.log("User fetched from DB ******",user);
     const token = exports.usePasswordHashToMakeToken(user)
-    console.log("generated New Token ******",token);
+    // console.log("generated New Token ******",token);
     const url = getPasswordResetURL(user, token)
     const emailTemplate = resetPasswordTemplate(user, url)
-    console.log(" emailTemplate emailTemplate",emailTemplate);
+    // console.log(" emailTemplate emailTemplate",emailTemplate);
     sendSignupTokenVerification(user.email, user.username, token);
     // const sendEmail = () => {
     //   transporter.sendMail(emailTemplate, (err, info) => {
