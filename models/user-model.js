@@ -53,8 +53,8 @@ const UserSchema = new Schema({
     },
     lastLoggedInAt: {
         type: Date,
-    required: true,
-    default: Date.now
+        required: true,
+        default: Date.now
     },
     tokens: [{
         token: {
@@ -70,7 +70,7 @@ const UserSchema = new Schema({
 UserSchema.methods.generateAuthToken = async function () {
     const user = this //this gives control over the current user model
     // const loggedInAt = new Date();
-    const token = jwt.sign({ _id: user._id.toString()}, 'QGluZGlsbGlnZW5jZWlzSW50ZWxsaWdlbmNlK0RpbGlnZW5jZVdoaWNoY3JlYXRlc0dlbml1c2VzJiQ=');
+    const token = jwt.sign({ _id: user._id.toString() }, 'QGluZGlsbGlnZW5jZWlzSW50ZWxsaWdlbmNlK0RpbGlnZW5jZVdoaWNoY3JlYXRlc0dlbml1c2VzJiQ=');
     user.tokens = user.tokens.concat({ token });
     user.lastLoggedInAt = new Date()
     await user.save();
@@ -98,6 +98,7 @@ UserSchema.methods.toJSON = function () {
 
     delete userObject.password;
     delete userObject.tokens;
+    delete userObject.securePIN;
 
     return userObject;
 }
@@ -123,13 +124,13 @@ UserSchema.statics.findByCredentials = async (email, password) => {
 UserSchema.statics.findByEmailAndPin = async (email, securePIN) => {
     const user = await UserModel.findOne({ email });
 
-    if(!user) {
+    if (!user) {
         throw new Error('User not found');
     }
 
     const isSecurePINMatch = await bcrypt.compare(securePIN, user.securePIN)
 
-    if(!isSecurePINMatch) {
+    if (!isSecurePINMatch) {
         throw new Error('Please check your secure PIN and try again.');
     }
 
