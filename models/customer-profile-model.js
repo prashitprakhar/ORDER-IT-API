@@ -29,12 +29,12 @@ const CustomerProfileSchema = new Schema({
         trim: true
     },
     customerAddressList: [{
-        addressId: { 
-            type: mongoose.Schema.Types.ObjectId,
-            required: true,
-            default: new mongoose.Types.ObjectId(),
-            unique: true
-        },
+        // addressId: { 
+        //     type: mongoose.Schema.Types.ObjectId,
+        //     required: true,
+        //     default: new mongoose.Types.ObjectId(),
+        //     unique: true
+        // },
         addressCategory: {
             type: String,
             trim: true,
@@ -77,6 +77,11 @@ const CustomerProfileSchema = new Schema({
         isCurrentlyUsed: {
             type: Boolean,
             default: false
+        },
+        createdAt: {
+            type: Date,
+            required: true,
+            default: Date.now
         }
     }],
     role: {
