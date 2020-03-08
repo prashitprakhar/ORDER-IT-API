@@ -202,7 +202,7 @@ CustomerOrdersSchema.statics.addNewOrder = async (customerOrdersDoc, currentOrde
     }
 
     let ordersListUpdated = [];
-    currentOrderDetails.ordersList.forEach(element => {
+    currentOrderDetails.orderedItemsList.forEach(element => {
         let itemDetails = {
             itemId: element.itemId,
             shopId: element.shopId,
