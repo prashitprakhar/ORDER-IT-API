@@ -5,80 +5,83 @@ const jwt = require('jsonwebtoken');
 
 const Schema = mongoose.Schema;
 
+var addressSchema = mongoose.Schema({
+    // itemId: { 
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     required: true,
+    //     default: new mongoose.Types.ObjectId(),
+    //     unique: true,
+    //     index: true
+    //     // default: null
+    // },
+    itemName: {
+        type: String,
+        trim: true
+    },
+    itemBrand: {
+        type: String,
+        trim: true
+    },
+    itemDescription : {
+        type: String,
+        trim: true
+    },
+    itemCategory: {
+        type: String,
+        trim: true
+    },
+    itemUndiscountedRate: {
+        type: Number
+        // required: true
+    },
+    itemWeight: {
+        type: Number
+        // required: true
+    },
+    itemUnit: {
+        type: String,
+        // required: true,
+        // trim: true
+    },
+    isDiscountedAvailable: {
+        type: Number,
+        // required: true,
+        // default: 0
+    },
+    itemDiscountedRate: {
+        type: Number
+        // required: true
+    },
+    discountAmount: {
+        type: Number
+        // required: true
+    },
+    discountPercentage: {
+        type: Number
+        // required: true
+    },
+    itemCount: {
+        type: Number
+        // required: true
+    },
+    itemAvailable: {
+        type: Boolean
+        // default: true
+    },
+    itemImageUrl: {
+        type: String
+        // required: true,
+        // trim: true
+    }
+});
+
 const ShopOfferedItemsSchema = new Schema({
     shopId: {
         type: String,
         required: true,
         trim: true
     },
-    shopOfferedItemsList: [{
-        itemId: { 
-            type: mongoose.Schema.Types.ObjectId,
-            required: true,
-            default: new mongoose.Types.ObjectId(),
-            unique: true
-            // default: null
-        },
-        itemName: {
-            type: String,
-            trim: true
-        },
-        itemBrand: {
-            type: String,
-            trim: true
-        },
-        itemDescription : {
-            type: String,
-            trim: true
-        },
-        itemCategory: {
-            type: String,
-            trim: true
-        },
-        itemUndiscountedRate: {
-            type: Number
-            // required: true
-        },
-        itemWeight: {
-            type: Number
-            // required: true
-        },
-        itemUnit: {
-            type: String,
-            // required: true,
-            // trim: true
-        },
-        isDiscountedAvailable: {
-            type: Number,
-            // required: true,
-            // default: 0
-        },
-        itemDiscountedRate: {
-            type: Number
-            // required: true
-        },
-        discountAmount: {
-            type: Number
-            // required: true
-        },
-        discountPercentage: {
-            type: Number
-            // required: true
-        },
-        itemCount: {
-            type: Number
-            // required: true
-        },
-        itemAvailable: {
-            type: Boolean
-            // default: true
-        },
-        itemImageUrl: {
-            type: String
-            // required: true,
-            // trim: true
-        }
-    }]
+    shopOfferedItemsList: [addressSchema]
 });
 
 ShopOfferedItemsSchema.methods.addNewItem = async function (newShopItem) {
@@ -87,7 +90,7 @@ ShopOfferedItemsSchema.methods.addNewItem = async function (newShopItem) {
     shopDoc.shopOfferedItemsList = shopDoc.shopOfferedItemsList.concat(newShopItem);
     let shopDocSaved = await shopDoc.save();
     if (!shopDocSaved) {
-        throw new Error('Shop Item not updated')
+        throw new Error('SHOP_ITEM_NOT_UPDATED')
     }
     return shopDocSaved;
 }
