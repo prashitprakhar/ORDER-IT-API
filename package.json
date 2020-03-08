@@ -4,7 +4,7 @@
   "description": "Order IT Services API",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "node app.js"
   },
   "author": "Prashit P",
   "license": "ISC",
