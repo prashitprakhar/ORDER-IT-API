@@ -7,6 +7,7 @@ const { CustomerProfileModel } = require('../models/customer-profile-model');
 const { SelectableItemCartModel } = require('../models/selectable-items-cart.model');
 const { CustomItemKGCartModel } = require('./../models/custom-items-kg-cart.model');
 const { CustomItemPackCartModel } = require('./../models/custom-items-pack-cart.model');
+const { CustomerOrdersModel } = require('./../models/customer-orders.model');
 
 
 exports.USER_LOGIN_DETAILS = async (req, res) => {
@@ -79,7 +80,7 @@ exports.CREATE_SHOP_ACCOUNT = async (req, res) => {
         res.status(201).send({ user, token })
     }
     catch (e) {
-        res.status(400).send(e)
+        res.status(400).send(e.toString())
     }
 }
 
@@ -455,9 +456,6 @@ exports.ADD_CUSTOM_KG_BULK_ITEM_TO_CART = async (req, res) => {
             const customKGBulkItemCartDoc = await CustomItemKGCartModel.addCustomKGBulkItemInCart(userCustomKGItemDoc, customKGBulkItemsList);
             res.status(200).send(customKGBulkItemCartDoc);
         }
-
-        // const selectableItemCartDoc = await SelectableItemCartModel.addNewSelectableItemInCart(selectableItemsDoc, selectableItem);
-        // res.status(200).send(selectableItemsDoc);
     }
     catch (e) {
         res.status(400).send(e.toString());
@@ -489,6 +487,75 @@ exports.REMOVE_CART_ITEMS_POST_ORDER = async (req, res) => {
     catch (e) {
         res.status(400).send(e.toString());
     }
+}
+
+exports.PLACE_CUSTOMER_ORDER = async (req, res) => {
+    const userId = req.body.userId;
+    const currentOrderDetails = req.body.orderDetails;
+
+    try {
+        const customerOrdersDoc = await CustomerOrdersModel.findOne({userId: userId});
+
+        if(!customerOrdersDoc) {
+            
+            const newCustomerOrderDoc = new CustomerOrdersModel({
+                userId,
+                ordersList: []
+            })
+            
+            // Create customerDoc
+            const newCustomerOrdersDoc = await newCustomerOrderDoc.save();
+
+            const customerNewOrderDoc = await CustomerOrdersModel.addNewOrder(newCustomerOrdersDoc, currentOrderDetails);
+
+            res.status(201).send(customerNewOrderDoc);
+        }
+        else {
+            const customerNewOrderDoc = await CustomerOrdersModel.addNewOrder(customerOrdersDoc, currentOrderDetails);
+
+            res.status(201).send(customerNewOrderDoc);
+        }
+    }
+    catch (e) {
+        res.status(400).send(e.toString());
+    }
+}
+
+exports.CUSTOMER_CURRENT_ORDER = async (req, res) => {
+    const userId = req.body.userId;
+    
+    try {
+        const customerOrdersDoc = await CustomerOrdersModel.findOne({userId: userId});
+
+        if (!customerOrdersDoc) {
+            throw new Error('NO_ORDERS');
+        }
+
+        const customerCurrentOrder = customerOrdersDoc.ordersList[0];
+
+        res.status(201).send(customerCurrentOrder);
+
+    }
+    catch (e) {
+        res.status(400).send(e.toString());
+    }
+}
+
+exports.CUSTOMER_ALL_ORDERS = async (req, res) => {
+    const userId = req.body.userId;
+
+    try {
+        const customerAllOrdersDoc = await CustomerOrdersModel.findOne({userId: userId});
+        if(!customerAllOrdersDoc) {
+            throw new Error('NO_ORDERS');
+        }
+        const ordersList = customerAllOrdersDoc.ordersList;
+        res.status(200).send(ordersList);
+    }
+    catch (e) {
+        res.status(400).send(e.toString());
+    }
+
 }
 
 exports.SEND_ORDER_STATUS_PUSH_NOTIFICATION = async (req, res) => {

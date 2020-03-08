@@ -45,6 +45,12 @@ router.post('/addNewBulkCustomPackItemToCart', USER_CONTROLLER.ADD_CUSTOM_PACK_B
 
 router.post('/removeCartItemPostOrder', USER_CONTROLLER.REMOVE_CART_ITEMS_POST_ORDER);
 
+router.post('/placeOrder', authentication, USER_CONTROLLER.PLACE_CUSTOMER_ORDER);
+
+router.post('/customerCurrentOrder', authentication, USER_CONTROLLER.CUSTOMER_CURRENT_ORDER);
+
+router.post('/getAllOrders', authentication, USER_CONTROLLER.CUSTOMER_ALL_ORDERS);
+
 // router.post('/checkLoginStatus', authentication, USER_CONTROLLER.CHECK_USER_LOGIN_CREDS);
 
 module.exports = router;

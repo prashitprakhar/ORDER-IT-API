@@ -61,15 +61,15 @@ exports.GET_SHOP_OFFERED_ITEMS = async (req, res) => {
 
 exports.UPDATE_ITEM_DETAILS = async (req, res) => {
     const shopId = req.body.shopId;
-    const itemId = req.body.itemId;
+    const _id = req.body._id;
 
     try {
         let shopItemsDoc = await ShopOfferedItemsModel.findOne({ shopId: shopId });
 
         if (shopItemsDoc) {
-            const shopItemsFiltered = shopItemsDoc.shopOfferedItemsList.filter(item => item.itemId != itemId);
+            const shopItemsFiltered = shopItemsDoc.shopOfferedItemsList.filter(item => item._id != _id);
             const updatedItemsDetails = {
-                itemId: itemId,
+                _id: _id,
                 itemName: req.body.itemName,
                 itemBrand: req.body.itemBrand,
                 itemDescription: req.body.itemDescription,
@@ -105,11 +105,11 @@ exports.UPDATE_ITEM_DETAILS = async (req, res) => {
 
 exports.DELETE_ITEM = async (req, res) => {
     const shopId = req.body.shopId;
-    const itemId = req.body.itemId;
+    const _id = req.body._id;
     try {
         let shopItemsDoc = await ShopOfferedItemsModel.findOne({ shopId: shopId });
         if (shopItemsDoc) {
-            const shopItemsFiltered = shopItemsDoc.shopOfferedItemsList.filter(item => item.itemId != itemId);
+            const shopItemsFiltered = shopItemsDoc.shopOfferedItemsList.filter(item => item._id != _id);
             shopItemsDoc.shopOfferedItemsList = shopItemsFiltered;
             let updatedShopItemsDoc = await shopItemsDoc.save();
             res.status(201).send(updatedShopItemsDoc)
@@ -124,12 +124,12 @@ exports.DELETE_ITEM = async (req, res) => {
 
 exports.CHANGE_ITEM_AVAILABILITY = async (req, res) => {
     const shopId = req.body.shopId;
-    const itemId = req.body.itemId;
+    const _id = req.body._id;
     try {
         let shopItemsDoc = await ShopOfferedItemsModel.findOne({ shopId: shopId });
         if (shopItemsDoc) {
-            let shopItemsFiltered = shopItemsDoc.shopOfferedItemsList.filter(item => item.itemId != itemId);
-            let itemDetails = shopItemsDoc.shopOfferedItemsList.find(item => item.itemId == itemId);
+            let shopItemsFiltered = shopItemsDoc.shopOfferedItemsList.filter(item => item._id != _id);
+            let itemDetails = shopItemsDoc.shopOfferedItemsList.find(item => item._id == _id);
             if (itemDetails) {
                 itemDetails.itemAvailable = !itemDetails.itemAvailable;
                 shopItemsFiltered.push(itemDetails);
