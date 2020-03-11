@@ -45,6 +45,10 @@ const SelectableItemCartSchema = new Schema({
         orderType: {
             type: String,
             trim: true
+        },
+        shopName: {
+            type: String,
+            trim: true
         }
     }]
 });
@@ -79,7 +83,7 @@ SelectableItemCartSchema.statics.clearCart = async (selectableItemDoc) => {
     const updatedSelectedItemDetails = await selectableItemDocument.save();
 
     if (!updatedSelectedItemDetails) {
-        throw new Error('ERROR_IN_SELECTABLE_ITEM_CART_CLEARANCE');
+        throw new Error('ERROR_IN_CART_CLEARANCE');
     }
 
     return updatedSelectedItemDetails;

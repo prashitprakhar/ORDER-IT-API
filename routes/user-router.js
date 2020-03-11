@@ -3,6 +3,8 @@ const router = new express.Router();
 const authentication = require('../middleware/authentication');
 const USER_CONTROLLER = require('./../controllers/user-controller');
 
+// router.get('/getObjectId', USER_CONTROLLER.GET_OBJECT_ID);
+
 router.post('/login', USER_CONTROLLER.USER_LOGIN_DETAILS);
 
 router.post('/signup', USER_CONTROLLER.USER_SIGNUP_CONTROLLER);
@@ -44,6 +46,10 @@ router.post('/updateCustomPackItemToCart', USER_CONTROLLER.ADD_REMOVE_CUSTOM_PAC
 router.post('/addNewBulkCustomPackItemToCart', USER_CONTROLLER.ADD_CUSTOM_PACK_BULK_ITEM_TO_CART);
 
 router.post('/removeCartItemPostOrder', USER_CONTROLLER.REMOVE_CART_ITEMS_POST_ORDER);
+
+router.post('/updateCartsOnLogin', USER_CONTROLLER.UPDATE_CARTS_ON_LOGIN);
+
+router.post('/getInitialLoginCartItems', USER_CONTROLLER.GET_INITIAL_LOGIN_ALL_CART_ITEMS);
 
 router.post('/placeOrder', authentication, USER_CONTROLLER.PLACE_CUSTOMER_ORDER);
 

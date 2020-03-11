@@ -45,6 +45,10 @@ const CustomItemPackCartSchema = new Schema({
         orderType: {
             type: String,
             trim: true
+        },
+        shopName: {
+            type: String,
+            trim: true
         }
     }]
 });
@@ -63,6 +67,7 @@ CustomItemPackCartSchema.statics.addCustomPackBulkItemInCart = async (customPack
 
 CustomItemPackCartSchema.statics.addCustomPackItemInCart = async (customPackItemDocItemsDoc, customPackItem) => {
     const customPackItemDocument = customPackItemDocItemsDoc;
+    console.log("customPackItemDocItemsDoc customPackItemDocItemsDoc ---", customPackItemDocItemsDoc);
     customPackItemDocument.customPackItemList = customPackItem;
     const updatedCustomPackItemDetails = await customPackItemDocument.save();
 
@@ -79,7 +84,7 @@ CustomItemPackCartSchema.statics.clearCart = async (customPackItemDocItemsDoc) =
     const updatedCustomPackItemDetails = await customPackItemDocument.save();
 
     if (!updatedCustomPackItemDetails) {
-        throw new Error('ERROR_IN_CUSTOM_PACK_ITEM_CART_CLEARANCE');
+        throw new Error('ERROR_IN_CART_CLEARANCE');
     }
 
     return updatedCustomPackItemDetails;
