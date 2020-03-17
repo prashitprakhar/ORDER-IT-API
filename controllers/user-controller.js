@@ -421,6 +421,76 @@ exports.ADD_CUSTOM_PACK_BULK_ITEM_TO_CART = async (req, res) => {
     }
 }
 
+exports.UPDATE_CUSTOM_ORDERS_CART = async (req, res) => {
+    const userId = req.body.userId;
+    const customPackItem = req.body.customPackItems;
+    const customKGItem = req.body.customKGItems;
+
+    try {
+        if (customPackItem && customKGItem) {
+            const userCustomPackItemDoc = await CustomItemPackCartModel.findOne({ userId: userId });
+            if (!userCustomPackItemDoc) {
+                const newCustomPackItemsCartDoc = new CustomItemPackCartModel({
+                    userId,
+                    customPackItemList: []
+                })
+                const customPackItemDocItemsDoc = await newCustomPackItemsCartDoc.save();
+                const customPackItemCartDoc = await CustomItemPackCartModel.addCustomPackItemInCart(customPackItemDocItemsDoc, customPackItem);
+            } else {
+                const customPackItemCartDoc = await CustomItemPackCartModel.addCustomPackItemInCart(userCustomPackItemDoc, customPackItem);
+            }
+    
+            const userCustomKGItemDoc = await CustomItemKGCartModel.findOne({ userId: userId });
+            if (!userCustomKGItemDoc) {
+                const newCustomKGItemsCartDoc = new CustomItemKGCartModel({
+                    userId,
+                    customKGItemList: []
+                })
+                const customKGItemDocItemsDoc = await newCustomKGItemsCartDoc.save();
+                const customKGItemCartDoc = await CustomItemKGCartModel.addCustomKGItemInCart(customKGItemDocItemsDoc, customKGItem);
+            } else {
+                const customKGItemCartDoc = await CustomItemKGCartModel.addCustomKGItemInCart(userCustomKGItemDoc, customKGItem);
+            }
+            res.status(200).json({message: 'SUCCESS'});
+        } else {
+            throw new Error('ERROR_IN_CUSTOM_ITEM_UPDATE');
+        }
+    }
+    catch (e) {
+        res.status(400).send(e.toString());
+    }
+}
+
+exports.UPDATE_SELECTABLE_ORDERS_CART = async (req, res) => {
+    const userId = req.body.userId;
+    const selectableItem = req.body.selectableItem;
+
+    try {
+        if(selectableItem) {
+            const userSelectableItemDoc = await SelectableItemCartModel.findOne({ userId: userId });
+            if (!userSelectableItemDoc) {
+                const newSelectableItemsCartDoc = new SelectableItemCartModel({
+                    userId,
+                    selectableItemsList: []
+                })
+                const selectableItemsDoc = await newSelectableItemsCartDoc.save();
+                const selectableItemCartDoc = await SelectableItemCartModel.addSelectableItemInCart(selectableItemsDoc, selectableItem);
+                // res.status(200).send(selectableItemCartDoc);
+            } 
+            else {
+                const selectableItemCartDoc = await SelectableItemCartModel.addSelectableItemInCart(userSelectableItemDoc, selectableItem);
+                // res.status(200).send(selectableItemCartDoc);
+            }
+            res.status(200).json({message: 'SUCCESS'});
+        } else {
+            throw new Error('ERROR_IN_SELECTABLE_ITEM_UPDATE');
+        }
+    }
+    catch (e) {
+        res.status(400).send(e.toString());
+    }
+}
+
 exports.ADD_REMOVE_CUSTOM_KG_ITEM_TO_CART = async (req, res) => {
     const userId = req.body.userId
     const customKGItem = req.body.customKGItem;

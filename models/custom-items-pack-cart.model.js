@@ -67,7 +67,7 @@ CustomItemPackCartSchema.statics.addCustomPackBulkItemInCart = async (customPack
 
 CustomItemPackCartSchema.statics.addCustomPackItemInCart = async (customPackItemDocItemsDoc, customPackItem) => {
     const customPackItemDocument = customPackItemDocItemsDoc;
-    console.log("customPackItemDocItemsDoc customPackItemDocItemsDoc ---", customPackItemDocItemsDoc);
+    // console.log("customPackItemDocItemsDoc customPackItemDocItemsDoc ---", customPackItemDocItemsDoc);
     customPackItemDocument.customPackItemList = customPackItem;
     const updatedCustomPackItemDetails = await customPackItemDocument.save();
 

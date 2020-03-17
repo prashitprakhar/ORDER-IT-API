@@ -170,6 +170,11 @@ const OrderDetailsSchema = mongoose.Schema({
     },
     orderedItemsList: [OrderedItemsSchema],
     deliveryAddress: AddressSchema,
+    paymentStatus: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
     createdAt: {
         type: Date,
         required: true,

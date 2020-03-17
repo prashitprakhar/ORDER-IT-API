@@ -1,0 +1,73 @@
+selectableItems : [
+  {
+    "shopId": "5e54d4f031c94e5e406c0690",
+    "shopName": "Maha Lakshmi Kirana & General Store",
+    "_id": "5e60b235400fe4811e000dfc",
+    "itemId": "5e60b235400fe4811e000dfc",
+    "itemName": "Rice",
+    "itemUnit": "g",
+    "itemCount": 2,
+    "itemDiscountedRate": 54,
+    "totalPrice": 108,
+    "itemWeight": 1000,
+    "orderType": "SELECT"
+  },
+  {
+    "shopId": "5e54d4f031c94e5e406c0690",
+    "shopName": "Maha Lakshmi Kirana & General Store",
+    "_id": "5e60b29e400fe4811e000dfd",
+    "itemId": "5e60b29e400fe4811e000dfd",
+    "itemName": "Lays",
+    "itemUnit": "g",
+    "itemCount": 1,
+    "itemDiscountedRate": 20,
+    "totalPrice": 20,
+    "itemWeight": 126,
+    "orderType": "SELECT"
+  },
+  {
+    "shopId": "5e54d4f031c94e5e406c0690",
+    "shopName": "Maha Lakshmi Kirana & General Store",
+    "_id": "5e60b2af400fe4811e000dfe",
+    "itemId": "5e60b2af400fe4811e000dfe",
+    "itemName": "Kurkure",
+    "itemUnit": "g",
+    "itemCount": 3,
+    "itemDiscountedRate": 20,
+    "totalPrice": 60,
+    "itemWeight": 126,
+    "orderType": "SELECT"
+  }
+]
+
+customItemsKG : [
+  {
+    "shopId": "5e54d4f031c94e5e406c0690",
+    "shopName": "Maha Lakshmi Kirana & General Store",
+    "_id": "5e6a7d461a47c93836327030",
+    "itemId": "5e6a7d461a47c93836327030",
+    "itemName": "Onion",
+    "itemCount": 2.5,
+    "itemUnit": "KG",
+    "totalPrice": 0,
+    "itemDiscountedRate": 0,
+    "itemWeight": 0,
+    "orderType": "CUSTOM"
+  }
+]
+
+customItemsPacks : [
+  {
+    "shopId": "5e54d4f031c94e5e406c0690",
+    "shopName": "Maha Lakshmi Kirana & General Store",
+    "_id": "5e6a7d461a47c93836327031",
+    "itemId": "5e6a7d461a47c93836327031",
+    "itemName": "Lays Rs. 20",
+    "itemCount": 3,
+    "itemUnit": "PACK",
+    "totalPrice": 0,
+    "itemDiscountedRate": 0,
+    "itemWeight": 0,
+    "orderType": "CUSTOM"
+  }
+]
