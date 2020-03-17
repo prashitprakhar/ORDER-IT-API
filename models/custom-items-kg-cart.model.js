@@ -45,9 +45,21 @@ const CustomItemKGCartSchema = new Schema({
         orderType: {
             type: String,
             trim: true
+        },
+        shopName: {
+            type: String,
+            trim: true
         }
     }]
 });
+
+// CustomItemKGCartSchema.statics.generateObjectId = async () => {
+//     let id = mongoose.Types.ObjectId();
+//     if (!id) {
+//         throw new Error('COULDNOT_GENERATE_OBJECT_ID')
+//     }
+//     return id;
+// }
 
 CustomItemKGCartSchema.statics.addCustomKGBulkItemInCart = async (customKGItemDocItemsDoc, customKGBulkItemsList) => {
     const customKGItemDocument = customKGItemDocItemsDoc;
@@ -79,7 +91,7 @@ CustomItemKGCartSchema.statics.clearCart = async (customKGItemDocItemsDoc) => {
     const updatedCustomKGItemDetails = await customKGItemDocument.save();
 
     if (!updatedCustomKGItemDetails) {
-        throw new Error('ERROR_IN_CUSTOM_KG_ITEM_CART_CLEARANCE');
+        throw new Error('ERROR_IN_CART_CLEARANCE');
     }
 
     return updatedCustomKGItemDetails;

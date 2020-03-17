@@ -3,6 +3,8 @@ const router = new express.Router();
 const authentication = require('../middleware/authentication');
 const USER_CONTROLLER = require('./../controllers/user-controller');
 
+// router.get('/getObjectId', USER_CONTROLLER.GET_OBJECT_ID);
+
 router.post('/login', USER_CONTROLLER.USER_LOGIN_DETAILS);
 
 router.post('/signup', USER_CONTROLLER.USER_SIGNUP_CONTROLLER);
@@ -31,19 +33,27 @@ router.post('/deleteAddress', authentication, USER_CONTROLLER.DELETE_SPECIFIED_A
 
 router.post('/getCustomerProfile', authentication, USER_CONTROLLER.GET_CUSTOMER_PROFILE_DETAILS);
 
-router.post('/updateSelectableItemToCart', USER_CONTROLLER.ADD_REMOVE_SELECTABLE_ITEM_TO_CART);
+router.post('/updateSelectableItemToCart', authentication, USER_CONTROLLER.ADD_REMOVE_SELECTABLE_ITEM_TO_CART);
 
-router.post('/addNewBulkSelectableItemToCart', USER_CONTROLLER.ADD_BULK_SELECTABLE_ITEMS_TO_CART);
+router.post('/addNewBulkSelectableItemToCart', authentication, USER_CONTROLLER.ADD_BULK_SELECTABLE_ITEMS_TO_CART);
 
-router.post('/updateCustomKGItemToCart', USER_CONTROLLER.ADD_REMOVE_CUSTOM_KG_ITEM_TO_CART);
+router.post('/updateCustomKGItemToCart', authentication, USER_CONTROLLER.ADD_REMOVE_CUSTOM_KG_ITEM_TO_CART);
 
-router.post('/addNewBulkCustomKGItemToCart', USER_CONTROLLER.ADD_CUSTOM_KG_BULK_ITEM_TO_CART);
+router.post('/addNewBulkCustomKGItemToCart', authentication, USER_CONTROLLER.ADD_CUSTOM_KG_BULK_ITEM_TO_CART);
 
-router.post('/updateCustomPackItemToCart', USER_CONTROLLER.ADD_REMOVE_CUSTOM_PACK_ITEM_TO_CART);
+router.post('/updateCustomPackItemToCart', authentication, USER_CONTROLLER.ADD_REMOVE_CUSTOM_PACK_ITEM_TO_CART);
 
-router.post('/addNewBulkCustomPackItemToCart', USER_CONTROLLER.ADD_CUSTOM_PACK_BULK_ITEM_TO_CART);
+router.post('/addNewBulkCustomPackItemToCart', authentication, USER_CONTROLLER.ADD_CUSTOM_PACK_BULK_ITEM_TO_CART);
 
-router.post('/removeCartItemPostOrder', USER_CONTROLLER.REMOVE_CART_ITEMS_POST_ORDER);
+router.post('/updateCustomOrdersCart', authentication, USER_CONTROLLER.UPDATE_CUSTOM_ORDERS_CART);
+
+router.post('/updateSelectableOrdersCart', authentication, USER_CONTROLLER.UPDATE_SELECTABLE_ORDERS_CART);
+
+router.post('/removeCartItemPostOrder', authentication, USER_CONTROLLER.REMOVE_CART_ITEMS_POST_ORDER);
+
+router.post('/updateCartsOnLogin', authentication, authentication, USER_CONTROLLER.UPDATE_CARTS_ON_LOGIN);
+
+router.post('/getInitialLoginCartItems', authentication, USER_CONTROLLER.GET_INITIAL_LOGIN_ALL_CART_ITEMS);
 
 router.post('/placeOrder', authentication, USER_CONTROLLER.PLACE_CUSTOMER_ORDER);
 
