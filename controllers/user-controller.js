@@ -8,6 +8,7 @@ const { SelectableItemCartModel } = require('../models/selectable-items-cart.mod
 const { CustomItemKGCartModel } = require('./../models/custom-items-kg-cart.model');
 const { CustomItemPackCartModel } = require('./../models/custom-items-pack-cart.model');
 const { CustomerOrdersModel } = require('./../models/customer-orders.model');
+const { SendPushNotificationToDevice } = require('./../emails/push-notification');
 
 // exports.GET_OBJECT_ID = async (req, res) => {
 //     try {
@@ -724,7 +725,25 @@ exports.CUSTOMER_ALL_ORDERS = async (req, res) => {
 }
 
 exports.SEND_ORDER_STATUS_PUSH_NOTIFICATION = async (req, res) => {
-
+// fcmToken, notificationTitle, notificationBody
+    const fcmToken = req.body.fcmToken;
+    const notificationTitle = req.body.notificationTitle;
+    const notificationBody = req.body.notificationBody;
+    console.log("fcmToken, notificationTitle, notificationBody", fcmToken, notificationTitle, notificationBody)
+    try {
+        const orderConfPushNotification = await SendPushNotificationToDevice(fcmToken, notificationTitle, notificationBody);
+        res.status(201).json({message: 'SUCCESS'});
+    }
+    catch (e) {
+        res.status(400).send(e.toString());
+    }
+    // const orderConfPushNotification = await SendPushNotificationToDevice()
+    // { "notification": {
+    //     "title": "$GOOG up 1.43% on the day",
+    //     "body": "$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day."
+    //   },
+    //   "to" : "dh0cQiSUj_Y:APA91bGwljiA94hz1OAd2f4wtMcu3RpplT5ezf5QXqg7J_MPE9PpAVcHQFy5y2w5kf0JQAN4-xECbbUkORkLlXV8mel4pAuV4rdoYXyG6D_5UICFOQ95YdBicZFLMd9GhNipJQ7IYoyn"
+    // }
 }
 
 // exports.CHECK_USER_LOGIN_CREDS = async (req, res) => {
