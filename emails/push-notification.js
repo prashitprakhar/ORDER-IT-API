@@ -1,12 +1,14 @@
 const rp = require('request-promise');
 
 const SendPushNotificationToDevice = async (fcmToken, notificationTitle, notificationBody) => {
-    const notification = {
-        "title": notificationTitle,
-        "body": notificationBody,
+    const notificationFormat = {
+        notification: {
+            "title": notificationTitle,
+            "body": notificationBody
+        },
         "to": fcmToken
     };
-    console.log("Notifications :::::", notification)
+    // console.log("Notifications :::::", notificationFormat)
     // const token = fcmToken;
     const url = 'https://fcm.googleapis.com/fcm/send';
     const authKey = 'key=AAAAg06JBfk:APA91bEl6ArHNOxGMucTEovZAfr5wK6AnbfOg60PFBFyJKLzacVgmQAXVPPO5V1wDsNkN8376xznRl4Ymtqe7ocbC0RZaU7nCO2RajO1-HaFG1_S9mKRORmE61AQsG-gl8dcEpYr6yBO';
@@ -14,9 +16,7 @@ const SendPushNotificationToDevice = async (fcmToken, notificationTitle, notific
         const options = {
             method: 'POST',
             url: url,
-            body: {
-                notification: notification
-            },
+            body: notificationFormat,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': authKey
@@ -26,13 +26,13 @@ const SendPushNotificationToDevice = async (fcmToken, notificationTitle, notific
 
         rp(options)
             .then(function (resBody) {
-                console.log("resBody resBody", resBody)
+                // console.log("resBody resBody", resBody)
                 // POST succeeded...
                 resolve(resBody)
             })
             .catch(function (err) {
                 // POST failed...
-                console.log("Error Message POST", err);
+                // console.log("Error Message POST", err);
                 if (JSON.parse(JSON.stringify(err)).statusCode === 401) {
 
                 } else {
