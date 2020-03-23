@@ -95,6 +95,10 @@ const ShopProfileSchema = new Schema({
     shopImageUrl: {
         type: String,
         required: true
+    },
+    shopFCMToken: {
+        type: String,
+        required: false
     }
 });
 
