@@ -31,3 +31,19 @@ exports.SAVE_MOBILE_DETAILS = async (req, res) => {
         res.status(400).send(e.toString())
     }
 }
+
+exports.GET_USER_MOBILE_DETAILS = async (req, res) => {
+    const userId = req.body.userId;
+
+    try {
+        const userMobileDetails = await MobileDetailsModel.findOne({ userId: userId });
+
+        if(!userMobileDetails) {
+            throw new Error('NO_MOBILE_DETAILS_DOC');
+        }
+        res.status(200).send(userMobileDetails)
+    }
+    catch (e) {
+        res.status(400).send(e.toString());
+    }
+}

@@ -24,6 +24,8 @@ router.post('/sendOrderStatusPushNotification', USER_CONTROLLER.SEND_ORDER_STATU
 
 router.post('/setUserMobileDetails', MOBILE_CONTROLLER.SAVE_MOBILE_DETAILS);
 
+router.post('/getUserMobileDetails', MOBILE_CONTROLLER.GET_USER_MOBILE_DETAILS);
+
 router.post('/addNewAddress', authentication, USER_CONTROLLER.ADD_CUSTOMER_NEW_ADDRESS);
 
 router.post('/customerSavedAddress', authentication, USER_CONTROLLER.GET_CUSTOMERS_SAVED_ADDRESSES);
