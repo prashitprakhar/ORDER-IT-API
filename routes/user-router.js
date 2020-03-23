@@ -2,6 +2,7 @@ const express = require('express');
 const router = new express.Router();
 const authentication = require('../middleware/authentication');
 const USER_CONTROLLER = require('./../controllers/user-controller');
+const MOBILE_CONTROLLER = require('./../controllers/mobile-details-controller');
 
 // router.get('/getObjectId', USER_CONTROLLER.GET_OBJECT_ID);
 
@@ -20,6 +21,10 @@ router.post('/deleteAccount', authentication, USER_CONTROLLER.DELETE_ACCOUNT);
 router.post('/resetPassword', USER_CONTROLLER.USER_RESET_PASSWORD);
 
 router.post('/sendOrderStatusPushNotification', USER_CONTROLLER.SEND_ORDER_STATUS_PUSH_NOTIFICATION);
+
+router.post('/setUserMobileDetails', MOBILE_CONTROLLER.SAVE_MOBILE_DETAILS);
+
+router.post('/getUserMobileDetails', MOBILE_CONTROLLER.GET_USER_MOBILE_DETAILS);
 
 router.post('/addNewAddress', authentication, USER_CONTROLLER.ADD_CUSTOMER_NEW_ADDRESS);
 

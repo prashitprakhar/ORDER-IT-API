@@ -8,7 +8,7 @@ const { SelectableItemCartModel } = require('../models/selectable-items-cart.mod
 const { CustomItemKGCartModel } = require('./../models/custom-items-kg-cart.model');
 const { CustomItemPackCartModel } = require('./../models/custom-items-pack-cart.model');
 const { CustomerOrdersModel } = require('./../models/customer-orders.model');
-const { SendPushNotificationToDevice } = require('./../emails/push-notification');
+const { SendPushNotificationToDevice } = require('./../push-notification-module/push-notification');
 
 // exports.GET_OBJECT_ID = async (req, res) => {
 //     try {
@@ -729,7 +729,7 @@ exports.SEND_ORDER_STATUS_PUSH_NOTIFICATION = async (req, res) => {
     const fcmToken = req.body.fcmToken;
     const notificationTitle = req.body.notificationTitle;
     const notificationBody = req.body.notificationBody;
-    console.log("fcmToken, notificationTitle, notificationBody", fcmToken, notificationTitle, notificationBody)
+    // console.log("fcmToken, notificationTitle, notificationBody", fcmToken, notificationTitle, notificationBody)
     try {
         const orderConfPushNotification = await SendPushNotificationToDevice(fcmToken, notificationTitle, notificationBody);
         res.status(201).json({message: 'SUCCESS'});
