@@ -1,7 +1,9 @@
 // const crypto = require('crypto');
 const mongoose = require('mongoose');
 const { ShopProfileModel } = require('../models/shop-profile-model');
-const { ShopOfferedItemsModel } = require('./../models/shop-offered-items-model');
+const { ShopOfferedItemsModel } = require('../models/shop-offered-items.model');
+const { ShopOrderDetailsModel } = require('./../models/shop-orders.model');
+const { CustomerOrdersModel } = require('./../models/customer-orders.model');
 
 // const { TokenModel } = require('../models/token-verification-model');
 // const { sendSignupTokenVerification } = require('../emails/account');
@@ -259,6 +261,171 @@ exports.GET_SHOP_PROFILE_FOR_CUSTOMERS = async (req, res) => {
     catch (e) {
         res.status(401).send(e.toString());
     }
+}
+
+// exports.ADD_NEW_ORDER = async (req, res) => {
+//     const shopId = req.body.shopId;
+// // ShopOrderDetailsModel
+//     const userId = req.body.userId;
+//     const currentOrderDetails = req.body.orderDetails;
+//     // console.log("shopId", shopId);
+//     // console.log("userId", userId);
+//     // console.log("currentOrderDetails", currentOrderDetails);
+
+//     try {
+//         const shopOrderDoc = await ShopOrderDetailsModel.findOne({shopId: shopId, userId: userId});
+
+//         if(!shopOrderDoc) {
+//             const newShopDoc = new ShopOrderDetailsModel({
+//                 shopId: shopId,
+//                 userId: userId,
+//                 ordersList: currentOrderDetails
+//             });
+
+//             const orderUpdateDoc = await newShopDoc.save();
+//             res.status(201).send(orderUpdateDoc);
+//         }
+
+//         const inProgressOrder = shopOrderDoc.ordersList.find(element => element.orderStatus === 'PROGRESS');
+
+//         if(inProgressOrder) {
+//             throw new Error('OTHER_ORDER_IN_PROGRESS');
+//         }
+
+//         const orderUpdateDoc = await ShopOrderDetailsModel.updateOrder(shopOrderDoc, currentOrderDetails);
+
+//         res.status(201).send(orderUpdateDoc)
+//     }
+//     catch (e) {
+//         res.status(400).send(e.toString())
+//     }
+
+// }
+
+exports.GET_ACTIVE_ORDERS = async (req, res) => {
+    const shopId = req.body.shopId;
+
+    try {
+
+        const shopOrderDoc = await ShopOrderDetailsModel.find({shopId: shopId});
+
+        if(!shopOrderDoc) {
+            throw new Error('NO_ORDERS');
+        }
+
+        let INProgressOrder = [];
+
+        shopOrderDoc.forEach(eachUserOrder => {
+            let inProgressOrder = eachUserOrder.ordersList.find(element => element.orderStatus === 'PROGRESS');
+
+            if(inProgressOrder) {
+                INProgressOrder.push(eachUserOrder);
+            }
+        })
+
+        res.status(200).send(INProgressOrder);
+    }
+    catch (e) {
+        res.status(401).send(e.toString());
+    }
+}
+
+exports.UPDATE_USER_ORDER = async (req, res) => {
+
+}
+
+exports.GET_COMPLETED_ORDERS = async (req, res) => {
+
+    const shopId = req.body.shopId;
+
+    try {
+
+        const shopOrderDoc = await ShopOrderDetailsModel.find({shopId: shopId});
+
+        if(!shopOrderDoc) {
+            throw new Error('NO_ORDERS_DOCUMENTS');
+        }
+
+        let completedOrderList = [];
+
+        shopOrderDoc.forEach(eachOrder => {
+            let completedOrder = eachOrder.ordersList.filter(element => element.orderStatus === 'COMPLETE')
+            if(completedOrder.length > 0) {
+                completedOrderList = [...completedOrderList, completedOrder]
+            }
+        })
+
+        // const completedOrders = shopOrderDoc.ordersList.filter(element => element.orderStatus === 'COMPLETE');
+
+        res.status(201).send(completedOrderList)
+
+    }
+    catch (e) {
+        res.status(401).send(e.toString())
+    }
+
+}
+
+exports.GET_ALL_ORDERS = async (req, res) => {
+
+    const shopId = req.body.shopId;
+
+    try {
+        const shopOrderDoc = await ShopOrderDetailsModel.find({shopId: shopId});
+
+        if(!shopOrderDoc) {
+            throw new Error('NO_ORDERS')
+        }
+
+        res.status(201).send(shopOrderDoc)
+    }
+    catch (e) {
+        res.status(401).send(e.toString());
+    }
+
+}
+
+exports.CHANGE_ORDER_STATUS = async (req, res) => {
+    const shopId = req.body.shopId;
+    const userId = req.body.userId;
+    const orderId = req.body.orderId;
+
+    try {
+        const shopOrderDoc = await ShopOrderDetailsModel.findOne({shopId: shopId, userId: userId});
+
+        const customerOrderDoc = await CustomerOrdersModel.findOne({userId: userId});
+
+        if(!shopOrderDoc || !customerOrderDoc) {
+            throw new Error('CANNOT_CHANGE_ORDER_STATUS');
+        }
+
+        let currentShopOrder = shopOrderDoc.ordersList.find(element => element.orderId === orderId);
+
+        let currentCustomerOrder = customerOrderDoc.ordersList.find(element => element.orderId === orderId);
+
+        if(!currentShopOrder || !currentCustomerOrder) {
+            throw new Error('ORDER_NOT_FOUND');
+        }
+
+        const statusUpdatedOrder = await ShopOrderDetailsModel.updateOrderStatus(shopOrderDoc, orderId, "COMPLETE");
+
+        const statusUpdatedCustomerOrder = await CustomerOrdersModel.updateOrderStatus(customerOrderDoc, orderId, "COMPLETE");
+
+        res.status(201).send({"message" : "SUCCESS"})
+
+    }
+    catch (e) {
+        const shopOrderDoc = await ShopOrderDetailsModel.findOne({shopId: shopId, userId: userId});
+
+        const customerOrderDoc = await CustomerOrdersModel.findOne({userId: userId});
+
+        const statusUpdatedOrder = await ShopOrderDetailsModel.updateOrderStatus(shopOrderDoc, orderId, "PROGRESS");
+
+        const statusUpdatedCustomerOrder = await CustomerOrdersModel.updateOrderStatus(customerOrderDoc, orderId, "PROGRESS");
+
+        res.status(400).send(e.toString())
+    }
+
 }
 
 

@@ -27,6 +27,17 @@ router.post('/getShopOfferedItemsForCustomers', SHOP_CONTROLLER.GET_SHOP_OFFERED
 
 router.post('/getShopProfileUnauthenticated', SHOP_CONTROLLER.GET_SHOP_PROFILE_FOR_CUSTOMERS);
 
+// router.post('/addNewOrderToShop', SHOP_CONTROLLER.ADD_NEW_ORDER); // Taken care in the Customer '/placeOrder' Request
+
+router.post('/getActiveOrders', SHOP_CONTROLLER.GET_ACTIVE_ORDERS); // Implemented
+
+router.post('/getCompletedOrders', SHOP_CONTROLLER.GET_COMPLETED_ORDERS); // Implemented
+
+router.post('/getAllOrders', SHOP_CONTROLLER.GET_ALL_ORDERS); // Implemented
+
+router.post('/changeOrderStatus', SHOP_CONTROLLER.CHANGE_ORDER_STATUS); // Implemented
+
+
 // router.post('/signup', USER_CONTROLLER.USER_SIGNUP_CONTROLLER);
 
 // router.post('/logout', authentication, USER_CONTROLLER.LOGOUT_USER_CONTROLLER);
