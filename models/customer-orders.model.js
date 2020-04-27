@@ -288,6 +288,27 @@ CustomerOrdersSchema.statics.updateOrderStatus = async (currentCustomerOrder, or
     return customerDocUpdatedFinal;
 }
 
+CustomerOrdersSchema.statics.updatePaymentStatus = async (currentCustomerOrder, orderId, status) => {
+    const nonCurrentOrderDoc = currentCustomerOrder.ordersList.filter(element => element.orderId !== orderId);
+    let currentOrderDoc = currentCustomerOrder.ordersList.filter(element => element.orderId === orderId);
+
+    currentOrderDoc[0].paymentStatus = status;
+    currentOrderDoc[0].updatedAt = new Date();
+
+    const finalOrdersListDoc = [...nonCurrentOrderDoc, ...currentOrderDoc];
+
+    currentCustomerOrder.ordersList = finalOrdersListDoc;
+    
+    const customerDocUpdatedFinal = await currentCustomerOrder.save();
+
+    if(!customerDocUpdatedFinal) {
+        throw new Error('PAYMENT_STATUS_UPDATE_FAILURE')
+    }
+
+    return customerDocUpdatedFinal;
+}
+
+
 const CustomerOrdersModel = mongoose.model('CUSTOMER_ORDERS', CustomerOrdersSchema, 'CUSTOMER_ORDERS');
 
 module.exports = { CustomerOrdersModel };

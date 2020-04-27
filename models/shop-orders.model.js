@@ -276,6 +276,25 @@ ShopOrderDetailsSchema.statics.updateOrderStatus = async (shopDoc, orderId, stat
     return shopDocUpdatedFinal;
 }
 
+ShopOrderDetailsSchema.statics.updatePaymentStatus = async (shopDoc, orderId, status) => {
+    const nonCurrentOrderDoc = shopDoc.ordersList.filter(element => element.orderId !== orderId);
+    let currentOrderDoc = shopDoc.ordersList.filter(element => element.orderId === orderId);
+    currentOrderDoc[0].paymentStatus = status;
+    currentOrderDoc[0].updatedAt = new Date()
+
+    const finalOrdersListDoc = [...nonCurrentOrderDoc, ...currentOrderDoc];
+
+    shopDoc.ordersList = finalOrdersListDoc;
+
+    const shopDocUpdatedFinal = await shopDoc.save();
+
+    if(!shopDocUpdatedFinal) {
+        throw new Error('PAYMENT_STATUS_UPDATE_FAILURE')
+    }
+
+    return shopDocUpdatedFinal;
+}
+
 const ShopOrderDetailsModel = mongoose.model('SHOP_ORDERS_DETAILS_LIST', ShopOrderDetailsSchema, 'SHOP_ORDERS_DETAILS_LIST');
 
 module.exports = { ShopOrderDetailsModel };

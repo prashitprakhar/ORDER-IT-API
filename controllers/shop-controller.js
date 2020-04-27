@@ -316,7 +316,7 @@ exports.GET_ACTIVE_ORDERS = async (req, res) => {
         let INProgressOrder = [];
 
         shopOrderDoc.forEach(eachUserOrder => {
-            let inProgressOrder = eachUserOrder.ordersList.find(element => element.orderStatus === 'PROGRESS');
+            let inProgressOrder = eachUserOrder.ordersList.find(element => element.orderStatus === 'PROGRESS' || element.orderStatus === 'PACKED' || element.orderStatus === 'OUTFORDELIVERY');
 
             if(inProgressOrder) {
                 INProgressOrder.push(eachUserOrder);
@@ -389,6 +389,8 @@ exports.CHANGE_ORDER_STATUS = async (req, res) => {
     const shopId = req.body.shopId;
     const userId = req.body.userId;
     const orderId = req.body.orderId;
+    const orderStatus = req.body.orderStatus;
+    const previousOrderStatus = req.body.previousOrderStatus;
 
     try {
         const shopOrderDoc = await ShopOrderDetailsModel.findOne({shopId: shopId, userId: userId});
@@ -407,9 +409,9 @@ exports.CHANGE_ORDER_STATUS = async (req, res) => {
             throw new Error('ORDER_NOT_FOUND');
         }
 
-        const statusUpdatedOrder = await ShopOrderDetailsModel.updateOrderStatus(shopOrderDoc, orderId, "COMPLETE");
+        const statusUpdatedOrder = await ShopOrderDetailsModel.updateOrderStatus(shopOrderDoc, orderId, orderStatus);
 
-        const statusUpdatedCustomerOrder = await CustomerOrdersModel.updateOrderStatus(customerOrderDoc, orderId, "COMPLETE");
+        const statusUpdatedCustomerOrder = await CustomerOrdersModel.updateOrderStatus(customerOrderDoc, orderId, orderStatus);
 
         res.status(201).send({"message" : "SUCCESS"})
 
@@ -419,13 +421,57 @@ exports.CHANGE_ORDER_STATUS = async (req, res) => {
 
         const customerOrderDoc = await CustomerOrdersModel.findOne({userId: userId});
 
-        const statusUpdatedOrder = await ShopOrderDetailsModel.updateOrderStatus(shopOrderDoc, orderId, "PROGRESS");
+        const statusUpdatedOrder = await ShopOrderDetailsModel.updateOrderStatus(shopOrderDoc, orderId, previousOrderStatus);
 
-        const statusUpdatedCustomerOrder = await CustomerOrdersModel.updateOrderStatus(customerOrderDoc, orderId, "PROGRESS");
+        const statusUpdatedCustomerOrder = await CustomerOrdersModel.updateOrderStatus(customerOrderDoc, orderId, previousOrderStatus);
 
         res.status(400).send(e.toString())
     }
 
+}
+
+exports.CHANGE_PAYMENT_STATUS = async (req, res) => {
+    const shopId = req.body.shopId;
+    const userId = req.body.userId;
+    const orderId = req.body.orderId;
+    const orderStatus = req.body.orderStatus;
+    const previousOrderStatus = req.body.previousOrderStatus;
+
+    try {
+        const shopOrderDoc = await ShopOrderDetailsModel.findOne({shopId: shopId, userId: userId});
+
+        const customerOrderDoc = await CustomerOrdersModel.findOne({userId: userId});
+
+        if(!shopOrderDoc || !customerOrderDoc) {
+            throw new Error('CANNOT_CHANGE_ORDER_PAYMENT_STATUS');
+        }
+
+        let currentShopOrder = shopOrderDoc.ordersList.find(element => element.orderId === orderId);
+
+        let currentCustomerOrder = customerOrderDoc.ordersList.find(element => element.orderId === orderId);
+
+        if(!currentShopOrder || !currentCustomerOrder) {
+            throw new Error('ORDER_NOT_FOUND');
+        }
+
+        const statusUpdatedOrder = await ShopOrderDetailsModel.updatePaymentStatus(shopOrderDoc, orderId, orderStatus);
+
+        const statusUpdatedCustomerOrder = await CustomerOrdersModel.updatePaymentStatus(customerOrderDoc, orderId, orderStatus);
+
+        res.status(201).send({"message" : "SUCCESS"})
+
+    }
+    catch (e) {
+        const shopOrderDoc = await ShopOrderDetailsModel.findOne({shopId: shopId, userId: userId});
+
+        const customerOrderDoc = await CustomerOrdersModel.findOne({userId: userId});
+
+        const statusUpdatedOrder = await ShopOrderDetailsModel.updatePaymentStatus(shopOrderDoc, orderId, previousOrderStatus);
+
+        const statusUpdatedCustomerOrder = await CustomerOrdersModel.updatePaymentStatus(customerOrderDoc, orderId, previousOrderStatus);
+
+        res.status(400).send(e.toString())
+    }
 }
 
 

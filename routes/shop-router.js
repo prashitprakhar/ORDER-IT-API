@@ -37,6 +37,8 @@ router.post('/getAllOrders', SHOP_CONTROLLER.GET_ALL_ORDERS); // Implemented
 
 router.post('/changeOrderStatus', SHOP_CONTROLLER.CHANGE_ORDER_STATUS); // Implemented
 
+router.post('/paymentComplete', SHOP_CONTROLLER.CHANGE_PAYMENT_STATUS); // Implemented
+
 
 // router.post('/signup', USER_CONTROLLER.USER_SIGNUP_CONTROLLER);
 
