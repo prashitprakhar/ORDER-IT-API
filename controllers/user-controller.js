@@ -1,14 +1,15 @@
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const { UserModel } = require('../models/user-model');
-const { TokenModel } = require('../models/token-verification-model');
+const { TokenModel } = require('../models/token-verification.model');
 const { sendSignupTokenVerification } = require('../emails/account');
-const { CustomerProfileModel } = require('../models/customer-profile-model');
+const { CustomerProfileModel } = require('../models/customer-profile.model');
 const { SelectableItemCartModel } = require('../models/selectable-items-cart.model');
 const { CustomItemKGCartModel } = require('./../models/custom-items-kg-cart.model');
 const { CustomItemPackCartModel } = require('./../models/custom-items-pack-cart.model');
 const { CustomerOrdersModel } = require('./../models/customer-orders.model');
 const { SendPushNotificationToDevice } = require('./../push-notification-module/push-notification');
+const { ShopOrderDetailsModel } = require('./../models/shop-orders.model');
 
 // exports.GET_OBJECT_ID = async (req, res) => {
 //     try {
@@ -336,7 +337,7 @@ exports.ADD_REMOVE_SELECTABLE_ITEM_TO_CART = async (req, res) => {
             const selectableItemsDoc = await newSelectableItemsCartDoc.save();
             const selectableItemCartDoc = await SelectableItemCartModel.addSelectableItemInCart(selectableItemsDoc, selectableItem);
             res.status(200).send(selectableItemCartDoc);
-        } 
+        }
         else {
             const selectableItemCartDoc = await SelectableItemCartModel.addSelectableItemInCart(userSelectableItemDoc, selectableItem);
             res.status(200).send(selectableItemCartDoc);
@@ -386,7 +387,7 @@ exports.ADD_REMOVE_CUSTOM_PACK_ITEM_TO_CART = async (req, res) => {
             const customPackItemDocItemsDoc = await newCustomPackItemsCartDoc.save();
             const customPackItemCartDoc = await CustomItemPackCartModel.addCustomPackItemInCart(customPackItemDocItemsDoc, customPackItem);
             res.status(200).send(customPackItemCartDoc);
-        } 
+        }
         else {
             const customPackItemCartDoc = await CustomItemPackCartModel.addCustomPackItemInCart(userCustomPackItemDoc, customPackItem);
             res.status(200).send(customPackItemCartDoc);
@@ -411,7 +412,7 @@ exports.ADD_CUSTOM_PACK_BULK_ITEM_TO_CART = async (req, res) => {
             const customPackItemDocItemsDoc = await newCustomPackItemsCartDoc.save();
             const customPackBulkItemCartDoc = await CustomItemPackCartModel.addCustomPackBulkItemInCart(customPackItemDocItemsDoc, customPackBulkItemsList);
             res.status(200).send(customPackBulkItemCartDoc);
-        } 
+        }
         else {
             const customPackBulkItemCartDoc = await CustomItemPackCartModel.addCustomPackBulkItemInCart(userCustomKGItemDoc, customPackBulkItemsList);
             res.status(200).send(customPackBulkItemCartDoc);
@@ -440,7 +441,7 @@ exports.UPDATE_CUSTOM_ORDERS_CART = async (req, res) => {
             } else {
                 const customPackItemCartDoc = await CustomItemPackCartModel.addCustomPackItemInCart(userCustomPackItemDoc, customPackItem);
             }
-    
+
             const userCustomKGItemDoc = await CustomItemKGCartModel.findOne({ userId: userId });
             if (!userCustomKGItemDoc) {
                 const newCustomKGItemsCartDoc = new CustomItemKGCartModel({
@@ -452,7 +453,7 @@ exports.UPDATE_CUSTOM_ORDERS_CART = async (req, res) => {
             } else {
                 const customKGItemCartDoc = await CustomItemKGCartModel.addCustomKGItemInCart(userCustomKGItemDoc, customKGItem);
             }
-            res.status(200).json({message: 'SUCCESS'});
+            res.status(200).json({ message: 'SUCCESS' });
         } else {
             throw new Error('ERROR_IN_CUSTOM_ITEM_UPDATE');
         }
@@ -467,7 +468,7 @@ exports.UPDATE_SELECTABLE_ORDERS_CART = async (req, res) => {
     const selectableItem = req.body.selectableItem;
 
     try {
-        if(selectableItem) {
+        if (selectableItem) {
             const userSelectableItemDoc = await SelectableItemCartModel.findOne({ userId: userId });
             if (!userSelectableItemDoc) {
                 const newSelectableItemsCartDoc = new SelectableItemCartModel({
@@ -477,12 +478,12 @@ exports.UPDATE_SELECTABLE_ORDERS_CART = async (req, res) => {
                 const selectableItemsDoc = await newSelectableItemsCartDoc.save();
                 const selectableItemCartDoc = await SelectableItemCartModel.addSelectableItemInCart(selectableItemsDoc, selectableItem);
                 // res.status(200).send(selectableItemCartDoc);
-            } 
+            }
             else {
                 const selectableItemCartDoc = await SelectableItemCartModel.addSelectableItemInCart(userSelectableItemDoc, selectableItem);
                 // res.status(200).send(selectableItemCartDoc);
             }
-            res.status(200).json({message: 'SUCCESS'});
+            res.status(200).json({ message: 'SUCCESS' });
         } else {
             throw new Error('ERROR_IN_SELECTABLE_ITEM_UPDATE');
         }
@@ -506,7 +507,7 @@ exports.ADD_REMOVE_CUSTOM_KG_ITEM_TO_CART = async (req, res) => {
             const customKGItemDocItemsDoc = await newCustomKGItemsCartDoc.save();
             const customKGItemCartDoc = await CustomItemKGCartModel.addCustomKGItemInCart(customKGItemDocItemsDoc, customKGItem);
             res.status(200).send(customKGItemCartDoc);
-        } 
+        }
         else {
             const customKGItemCartDoc = await CustomItemKGCartModel.addCustomKGItemInCart(userCustomKGItemDoc, customKGItem);
             res.status(200).send(customKGItemCartDoc);
@@ -531,7 +532,7 @@ exports.ADD_CUSTOM_KG_BULK_ITEM_TO_CART = async (req, res) => {
             const customKGItemDocItemsDoc = await newCustomKGItemsCartDoc.save();
             const customKGBulkItemCartDoc = await CustomItemKGCartModel.addCustomKGBulkItemInCart(customKGItemDocItemsDoc, customKGBulkItemsList);
             res.status(200).send(customKGBulkItemCartDoc);
-        } 
+        }
         else {
             const customKGBulkItemCartDoc = await CustomItemKGCartModel.addCustomKGBulkItemInCart(userCustomKGItemDoc, customKGBulkItemsList);
             res.status(200).send(customKGBulkItemCartDoc);
@@ -550,19 +551,19 @@ exports.REMOVE_CART_ITEMS_POST_ORDER = async (req, res) => {
         if (userSelectableItemDoc) {
             const selectableItemCart = await SelectableItemCartModel.clearCart(userSelectableItemDoc);
         }
-        
+
         const userCustomPackItemDoc = await CustomItemPackCartModel.findOne({ userId: userId });
         if (userCustomPackItemDoc) {
             const customPackCart = await CustomItemPackCartModel.clearCart(userCustomPackItemDoc);
         }
-        
+
         const userCustomKGItemDoc = await CustomItemKGCartModel.findOne({ userId: userId });
         if (userCustomKGItemDoc) {
             const customKGCart = await CustomItemKGCartModel.clearCart(userCustomKGItemDoc);
         }
 
-        res.status(201).json({message : 'CART_ITEMS_CLEARED_POST_ORDER'})
-        
+        res.status(201).json({ message: 'CART_ITEMS_CLEARED_POST_ORDER' })
+
     }
     catch (e) {
         res.status(400).send(e.toString());
@@ -612,7 +613,7 @@ exports.UPDATE_CARTS_ON_LOGIN = async (req, res) => {
         } else {
             const customKGItemCartDoc = await CustomItemKGCartModel.addCustomKGItemInCart(userCustomKGItemDoc, customKGItem);
         }
-        res.status(200).json({message: 'SUCCESS'});
+        res.status(200).json({ message: 'SUCCESS' });
 
     }
     catch (e) {
@@ -624,7 +625,7 @@ exports.GET_INITIAL_LOGIN_ALL_CART_ITEMS = async (req, res) => {
     const userId = req.body.userId;
 
     try {
-        const selectableItemsCartDoc = await SelectableItemCartModel.findOne({ userId : userId });
+        const selectableItemsCartDoc = await SelectableItemCartModel.findOne({ userId: userId });
         const customKGCartItemsDoc = await CustomItemKGCartModel.findOne({ userId: userId });
         const customPackCartItemsDoc = await CustomItemPackCartModel.findOne({ userId: userId });
         let selectableItems = [];
@@ -658,40 +659,98 @@ exports.GET_INITIAL_LOGIN_ALL_CART_ITEMS = async (req, res) => {
 exports.PLACE_CUSTOMER_ORDER = async (req, res) => {
     const userId = req.body.userId;
     const currentOrderDetails = req.body.orderDetails;
+    const shopId = req.body.shopId;
+
+    /*
 
     try {
-        const customerOrdersDoc = await CustomerOrdersModel.findOne({userId: userId});
+        const shopOrderDoc = await ShopOrderDetailsModel.findOne({shopId: shopId, userId: userId});
 
-        if(!customerOrdersDoc) {
-            
+        if(!shopOrderDoc) {
+            const newShopDoc = new ShopOrderDetailsModel({
+                shopId: shopId,
+                userId: userId,
+                ordersList: currentOrderDetails
+            });
+
+            const orderUpdateDoc = await newShopDoc.save();
+            res.status(201).send(orderUpdateDoc);
+        }
+
+        const inProgressOrder = shopOrderDoc.ordersList.find(element => element.orderStatus === 'PROGRESS');
+
+        if(inProgressOrder) {
+            throw new Error('OTHER_ORDER_IN_PROGRESS');
+        }
+
+        const orderUpdateDoc = await ShopOrderDetailsModel.updateOrder(shopOrderDoc, currentOrderDetails);
+
+        res.status(201).send(orderUpdateDoc)
+    }
+
+    */
+
+    try {
+        const customerOrdersDoc = await CustomerOrdersModel.findOne({ userId: userId });
+        const shopOrderDoc = await ShopOrderDetailsModel.findOne({ shopId: shopId, userId: userId });
+        if (!customerOrdersDoc) {
             const newCustomerOrderDoc = new CustomerOrdersModel({
                 userId,
                 ordersList: []
             })
-            
             // Create customerDoc
             const newCustomerOrdersDoc = await newCustomerOrderDoc.save();
-
             const customerNewOrderDoc = await CustomerOrdersModel.addNewOrder(newCustomerOrdersDoc, currentOrderDetails);
-
-            res.status(201).send(customerNewOrderDoc);
+            // res.status(201).send(customerNewOrderDoc);
         }
         else {
+            const inProgressOrder = customerOrdersDoc.ordersList.find(element => element.orderStatus === 'PROGRESS');
+            if (inProgressOrder) {
+                throw new Error('OTHER_ORDER_IN_PROGRESS');
+            }
             const customerNewOrderDoc = await CustomerOrdersModel.addNewOrder(customerOrdersDoc, currentOrderDetails);
-
-            res.status(201).send(customerNewOrderDoc);
+            // res.status(201).send(customerNewOrderDoc);
         }
+        // Updating Shop 
+        if (!shopOrderDoc) {
+            const newShopDoc = new ShopOrderDetailsModel({
+                shopId: shopId,
+                userId: userId,
+                ordersList: currentOrderDetails
+            });
+            const orderUpdateDoc = await newShopDoc.save();
+            // res.status(201).send(orderUpdateDoc);
+        }
+        else {
+            const inProgressOrder = shopOrderDoc.ordersList.find(element => element.orderStatus === 'PROGRESS');
+            if (inProgressOrder) {
+                throw new Error('OTHER_ORDER_IN_PROGRESS');
+            }
+            const orderUpdateDoc = await ShopOrderDetailsModel.updateOrder(shopOrderDoc, currentOrderDetails);
+        }
+        res.status(201).json({"message":"SUCCESS"});
+
     }
     catch (e) {
+        // ROLL BACK Code
+        // console.log("error %%%%%",userId);
+        const customerOrdersDoc = await CustomerOrdersModel.findOne({ userId: userId });
+        const shopOrderDoc = await ShopOrderDetailsModel.findOne({ shopId: shopId, userId: userId });
+        if(customerOrdersDoc) {
+            const removedLastOrderCustomerDoc = await ShopOrderDetailsModel.rollBackLastOrder(customerOrdersDoc, currentOrderDetails.orderId);
+        }
+        if(shopOrderDoc) {
+            const removedLastOrderShopDoc = await ShopOrderDetailsModel.rollBackLastOrder(shopOrderDoc, currentOrderDetails.orderId);
+        }
         res.status(400).send(e.toString());
     }
 }
 
 exports.CUSTOMER_CURRENT_ORDER = async (req, res) => {
     const userId = req.body.userId;
-    
+
     try {
-        const customerOrdersDoc = await CustomerOrdersModel.findOne({userId: userId});
+        const customerOrdersDoc = await CustomerOrdersModel.findOne({ userId: userId });
 
         if (!customerOrdersDoc) {
             throw new Error('NO_ORDERS');
@@ -711,8 +770,8 @@ exports.CUSTOMER_ALL_ORDERS = async (req, res) => {
     const userId = req.body.userId;
 
     try {
-        const customerAllOrdersDoc = await CustomerOrdersModel.findOne({userId: userId});
-        if(!customerAllOrdersDoc) {
+        const customerAllOrdersDoc = await CustomerOrdersModel.findOne({ userId: userId });
+        if (!customerAllOrdersDoc) {
             throw new Error('NO_ORDERS');
         }
         const ordersList = customerAllOrdersDoc.ordersList;
@@ -725,14 +784,14 @@ exports.CUSTOMER_ALL_ORDERS = async (req, res) => {
 }
 
 exports.SEND_ORDER_STATUS_PUSH_NOTIFICATION = async (req, res) => {
-// fcmToken, notificationTitle, notificationBody
+    // fcmToken, notificationTitle, notificationBody
     const fcmToken = req.body.fcmToken;
     const notificationTitle = req.body.notificationTitle;
     const notificationBody = req.body.notificationBody;
     // console.log("fcmToken, notificationTitle, notificationBody", fcmToken, notificationTitle, notificationBody)
     try {
         const orderConfPushNotification = await SendPushNotificationToDevice(fcmToken, notificationTitle, notificationBody);
-        res.status(201).json({message: 'SUCCESS'});
+        res.status(201).json({ message: 'SUCCESS' });
     }
     catch (e) {
         res.status(400).send(e.toString());

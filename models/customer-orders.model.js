@@ -250,8 +250,64 @@ CustomerOrdersSchema.statics.addNewOrder = async (customerOrdersDoc, currentOrde
     }
 
     return orderPlacedDoc;
-
 }
+
+CustomerOrdersSchema.statics.rollBackLastOrder = async (customerOrdersDoc, orderId) => { 
+    const existingOrdersDoc = customerOrdersDoc;
+
+    const lastOrderRemovedDoc = existingOrdersDoc.ordersList.filter(element => element.orderId !== orderId)
+
+    existingOrdersDoc.ordersList = lastOrderRemovedDoc;
+
+    const orderPlacedDoc = await existingOrdersDoc.save()
+
+    if(!orderPlacedDoc) {
+        throw new Error('ORDER_ROLLBACK_FAILURE');
+    }
+
+    return orderPlacedDoc;
+}
+
+CustomerOrdersSchema.statics.updateOrderStatus = async (currentCustomerOrder, orderId, status) => {
+    const nonCurrentOrderDoc = currentCustomerOrder.ordersList.filter(element => element.orderId !== orderId);
+    let currentOrderDoc = currentCustomerOrder.ordersList.filter(element => element.orderId === orderId);
+
+    currentOrderDoc[0].orderStatus = status;
+    currentOrderDoc[0].updatedAt = new Date();
+
+    const finalOrdersListDoc = [...nonCurrentOrderDoc, ...currentOrderDoc];
+
+    currentCustomerOrder.ordersList = finalOrdersListDoc;
+    
+    const customerDocUpdatedFinal = await currentCustomerOrder.save();
+
+    if(!customerDocUpdatedFinal) {
+        throw new Error('ORDER_STATUS_UPDATE_FAILURE')
+    }
+
+    return customerDocUpdatedFinal;
+}
+
+CustomerOrdersSchema.statics.updatePaymentStatus = async (currentCustomerOrder, orderId, status) => {
+    const nonCurrentOrderDoc = currentCustomerOrder.ordersList.filter(element => element.orderId !== orderId);
+    let currentOrderDoc = currentCustomerOrder.ordersList.filter(element => element.orderId === orderId);
+
+    currentOrderDoc[0].paymentStatus = status;
+    currentOrderDoc[0].updatedAt = new Date();
+
+    const finalOrdersListDoc = [...nonCurrentOrderDoc, ...currentOrderDoc];
+
+    currentCustomerOrder.ordersList = finalOrdersListDoc;
+    
+    const customerDocUpdatedFinal = await currentCustomerOrder.save();
+
+    if(!customerDocUpdatedFinal) {
+        throw new Error('PAYMENT_STATUS_UPDATE_FAILURE')
+    }
+
+    return customerDocUpdatedFinal;
+}
+
 
 const CustomerOrdersModel = mongoose.model('CUSTOMER_ORDERS', CustomerOrdersSchema, 'CUSTOMER_ORDERS');
 

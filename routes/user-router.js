@@ -60,7 +60,7 @@ router.post('/updateCartsOnLogin', authentication, authentication, USER_CONTROLL
 
 router.post('/getInitialLoginCartItems', authentication, USER_CONTROLLER.GET_INITIAL_LOGIN_ALL_CART_ITEMS);
 
-router.post('/placeOrder', authentication, USER_CONTROLLER.PLACE_CUSTOMER_ORDER);
+router.post('/placeOrder', USER_CONTROLLER.PLACE_CUSTOMER_ORDER);
 
 router.post('/customerCurrentOrder', authentication, USER_CONTROLLER.CUSTOMER_CURRENT_ORDER);
 
