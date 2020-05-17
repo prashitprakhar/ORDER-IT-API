@@ -4,6 +4,7 @@ const mongoose = require('./db-connections/mongoose-connection');
 const USER_ROUTER_FACTORY = require('./routes/user-router');
 const SHOP_ROUTER_FACTORY = require('./routes/shop-router');
 const EMAIL_ROUTER_FACTORY = require('./routes/email-router');
+const GEO_SPATIAL_ROUTER_FACTORY = require('./routes/geo-spatial-router');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -22,6 +23,7 @@ app.use((req, res, next) => {
 app.use('/users', USER_ROUTER_FACTORY);
 app.use('/shop', SHOP_ROUTER_FACTORY);
 app.use('/email', EMAIL_ROUTER_FACTORY);
+app.use('/geoSpatial', GEO_SPATIAL_ROUTER_FACTORY);
 
 app.listen(port, () => {
     console.log("Listening on port : ", port);

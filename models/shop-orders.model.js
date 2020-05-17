@@ -186,15 +186,6 @@ const OrderDetailsSchema = mongoose.Schema({
     }
 })
 
-// const usersOrdersSchema = mongoose.Schema({
-//     userId: {
-//         type: String,
-//         // required: true,
-//         trim: true
-//     },
-//     ordersList: [OrderDetailsSchema]
-// })
-
 const ShopOrderDetailsSchema = new Schema({
     shopId: {
         type: String,
@@ -207,26 +198,7 @@ const ShopOrderDetailsSchema = new Schema({
         trim: true
     },
     ordersList: [OrderDetailsSchema]
-    // usersOrders: [usersOrdersSchema]
 });
-
-// {
-//     shopId: 'shopId1',
-//      users: [
-//     {
-//      userId: 'userId1',
-//      ordersList: []
-//    },
-//    {
-//      userId: 'userId2',
-//      ordersList: []
-//    },
-//    {
-//      userId: 'userId3',
-//      ordersList: []
-//    }
-//    ]
-//    }
 
 ShopOrderDetailsSchema.statics.updateOrder = async (newShopOrderDoc, currentOrderDetails) => {
 

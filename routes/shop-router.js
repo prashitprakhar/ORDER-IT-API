@@ -23,6 +23,8 @@ router.post('/changeShopOpenStatus', authentication, SHOP_CONTROLLER.CHANGE_SHOP
 
 router.get('/getAllShops', SHOP_CONTROLLER.GET_ALL_SHOPS);
 
+router.post('/getAllRelevantShops', SHOP_CONTROLLER.GET_ALL_RELEVANT_SHOPS)
+
 router.post('/getShopOfferedItemsForCustomers', SHOP_CONTROLLER.GET_SHOP_OFFERED_ITEMS_FOR_CUSTOMERS);
 
 router.post('/getShopProfileUnauthenticated', SHOP_CONTROLLER.GET_SHOP_PROFILE_FOR_CUSTOMERS);
@@ -38,6 +40,8 @@ router.post('/getAllOrders', SHOP_CONTROLLER.GET_ALL_ORDERS); // Implemented
 router.post('/changeOrderStatus', SHOP_CONTROLLER.CHANGE_ORDER_STATUS); // Implemented
 
 router.post('/paymentComplete', SHOP_CONTROLLER.CHANGE_PAYMENT_STATUS); // Implemented
+
+
 
 
 // router.post('/signup', USER_CONTROLLER.USER_SIGNUP_CONTROLLER);

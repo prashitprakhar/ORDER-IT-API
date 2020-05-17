@@ -4,9 +4,20 @@ const { ShopProfileModel } = require('../models/shop-profile-model');
 const { ShopOfferedItemsModel } = require('../models/shop-offered-items.model');
 const { ShopOrderDetailsModel } = require('./../models/shop-orders.model');
 const { CustomerOrdersModel } = require('./../models/customer-orders.model');
+const { GeoSpatialModel } = require('./../models/geo-spatial.model');
 
 // const { TokenModel } = require('../models/token-verification-model');
 // const { sendSignupTokenVerification } = require('../emails/account');
+/*
+shopLongitude: {
+        type: Number,
+        required: false
+    },
+    shopLatitude: {
+        type: Number,
+        required: false
+    }
+*/
 
 exports.CREATE_SHOP_PROFILE = async (req, res) => {
     const shopProfileDetails = new ShopProfileModel({
@@ -142,10 +153,6 @@ exports.CHANGE_ITEM_AVAILABILITY = async (req, res) => {
             else {
                 throw new Error('NO_ITEM_FOUND')
             }
-
-            // shopItemsDoc.shopOfferedItemsList = shopItemsFiltered;
-            // let updatedShopItemsDoc = await shopItemsDoc.save();
-            // res.status(201).send(updatedShopItemsDoc)
         }
         else {
             throw new Error('NO_DOC_FOUND')
@@ -167,12 +174,10 @@ exports.CHANGE_SHOP_AVAILABILITY = async (req, res) => {
         else {
             throw new Error("NO_DOC_FOUND");
         }
-        //isShopOpen
     }
     catch (e) {
         res.status(400).send(e.toString());
     }
-    // ShopProfileModel
 }
 
 exports.ADD_ITEMS_FOR_SHOP = async (req, res) => {
@@ -237,6 +242,34 @@ exports.GET_ALL_SHOPS = async (req, res) => {
     catch (e) {
         res.status(400).send(e.toString());
     }
+}
+
+exports.GET_ALL_RELEVANT_SHOPS = async (req, res) => {
+    const coordinates = req.body.coordinates;
+    
+    try {
+        const shopDetails = await GeoSpatialModel.find({
+            location: {
+             $near: {
+              $maxDistance: 200,
+              $geometry: {
+               type: "Point",
+               coordinates: [coordinates[0], coordinates[1]]
+              }
+             }
+            }
+           });
+           console.log("NEAREST SHOP DETAILS ***", shopDetails);
+           res.status(200).send(shopDetails);
+    }   
+    catch(e) {
+        res.status(400).send(e.toString())
+    }
+    
+    //    .find((error, results) => {
+    //     if (error) console.log(error);
+    //     console.log(JSON.stringify(results, 0, 2));
+    //    });
 }
 
 exports.GET_SHOP_OFFERED_ITEMS_FOR_CUSTOMERS = async (req, res) => {
