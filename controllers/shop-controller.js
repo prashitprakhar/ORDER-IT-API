@@ -248,7 +248,7 @@ exports.GET_ALL_RELEVANT_SHOPS = async (req, res) => {
     const coordinates = req.body.coordinates;
     
     try {
-        const shopDetails = await GeoSpatialModel.find({
+        const nearestShopDetails = await GeoSpatialModel.find({
             location: {
              $near: {
               $maxDistance: 200,
@@ -259,8 +259,11 @@ exports.GET_ALL_RELEVANT_SHOPS = async (req, res) => {
              }
             }
            });
-           console.log("NEAREST SHOP DETAILS ***", shopDetails);
-           res.status(200).send(shopDetails);
+           const nearestShopUserIds = nearestShopDetails.map(eachShop => eachShop.userId);
+           const uniqueShopIds = [...new Set(nearestShopUserIds)];
+           console.log("uniqueShopIds uniqueShopIds", uniqueShopIds);
+           const nearestAvailableShops = await ShopProfileModel.find({shopId : {$in : uniqueShopIds}});
+           res.status(200).send(nearestAvailableShops);
     }   
     catch(e) {
         res.status(400).send(e.toString())

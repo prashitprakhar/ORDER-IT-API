@@ -10,6 +10,7 @@ exports.SAVE_GEO_SPATIAL_DETAILS = async (req, res) => {
         const doc = await GeoSpatialModel.findOne({ userId })
 
         if (doc) {
+            console.log("doc $$$", doc);
             const updatedDoc = await doc.updateCoordinates(doc, location);
 
             res.status(201).send(updatedDoc);
@@ -39,7 +40,7 @@ exports.CHECK_GEO_SPATIAL_DETAILS = async(req, res) => {
         const doc = await GeoSpatialModel.findOne({ userId });
 
         res.status(201).send(doc);
-        
+
     }
     catch (e) {
         res.status(400).send(e.toString());
